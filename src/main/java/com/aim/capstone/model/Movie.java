@@ -29,18 +29,18 @@ public class Movie implements Comparable<Movie>
   @Column(name = "trailer_url")
   private String trailerUrl;
   @ManyToOne
-  @JoinColumn(name = "genre_id", referencedColumnName = "id", nullable = false)
+  @JoinColumn(name = "genre_id", nullable = false)
   private Genre genre;
   @ManyToOne
-  @JoinColumn(name = "rating_id", referencedColumnName = "id", nullable = false)
+  @JoinColumn(name = "rating_id", nullable = false)
   private Rating rating;
   @ManyToOne
-  @JoinColumn(name = "director_id", referencedColumnName = "id")
+  @JoinColumn(name = "director_id")
   private Director director;
   @ManyToMany(fetch = FetchType.LAZY)//cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   @JoinTable(name = "movie_cast", 
-    joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "id"))
+    joinColumns = @JoinColumn(name = "movie_id"),
+    inverseJoinColumns = @JoinColumn(name = "actor_id"))
   private List<Actor> actors;
   // @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
   //@ManyToAny()
