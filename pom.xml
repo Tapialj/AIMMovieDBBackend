@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.3</version>
+		<version>4.1.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.aim</groupId>
@@ -127,10 +127,6 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.5.6</version>
 				<configuration>
-					<environmentVariables>
-						<JWT_EXP_SEC>30</JWT_EXP_SEC>
-						<JWT_REFRESH_SEC>60</JWT_REFRESH_SEC>
-					</environmentVariables>
 					<redirectTestOutputToFile>true</redirectTestOutputToFile>
 					<argLine>
 						--add-opens=java.base/java.lang=ALL-UNNAMED
