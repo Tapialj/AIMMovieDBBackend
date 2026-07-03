@@ -42,6 +42,7 @@ public class SecurityConfig
       .cors(Customizer.withDefaults())
       .authorizeHttpRequests((authorizeHttpRequests) ->
         authorizeHttpRequests
+          // .requestMatchers("/api/**").permitAll()
           .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
           .requestMatchers(HttpMethod.POST, "/api/**").hasRole(Roles.ADMIN.getName())
           .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole(Roles.ADMIN.getName())
@@ -72,7 +73,7 @@ public class SecurityConfig
       CorsConfiguration configuration = new CorsConfiguration();
       UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-      configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", ""));
+      configuration.setAllowedOrigins(Arrays.asList("http://localhost:3030", ""));
       configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
       configuration.setAllowCredentials(true);
       configuration.setAllowedHeaders(List.of("Authorization", "Content-type"));
