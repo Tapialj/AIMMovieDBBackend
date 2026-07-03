@@ -41,6 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
     
     if(authHeader == null || !authHeader.startsWith("Bearer"))
     {
+      // Something about this breaks Spring 4
       filterChain.doFilter(request, response);
       return;
     }
