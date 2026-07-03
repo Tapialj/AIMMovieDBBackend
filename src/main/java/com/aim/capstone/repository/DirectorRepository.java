@@ -32,4 +32,12 @@ public interface DirectorRepository extends JpaRepository <Director, Long>
   )
   List<Movie> findMovieByDirectorId(Long id);
 
+  @Query(
+    """
+    SELECT MAX(d.id)
+    FROM Director d
+    """
+  )
+  long getMax();
+
 }

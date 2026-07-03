@@ -32,4 +32,12 @@ public interface ActorRepository extends JpaRepository <Actor, Long>
   )
   List<Movie> findMovieByMovieCast(Long id);
 
+  @Query(
+    """
+    SELECT MAX(a.id)
+    FROM Actor a
+    """
+  )
+  long getMax();
+
 }
