@@ -2,6 +2,10 @@ package com.aim.capstone.model;
 
 import java.time.*;
 import java.util.*;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -37,10 +41,13 @@ public class Movie implements Comparable<Movie>
   @ManyToOne
   @JoinColumn(name = "director_id")
   private Director director;
-  @ManyToMany(fetch = FetchType.LAZY)//cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-  @JoinTable(name = "movie_cast", 
+  @ManyToMany //(fetch = FetchType.LAZY)//cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+  @JoinTable(
+    name = "movie_cast", 
     joinColumns = @JoinColumn(name = "movie_id"),
-    inverseJoinColumns = @JoinColumn(name = "actor_id"))
+    inverseJoinColumns = @JoinColumn(name = "actor_id")
+  )
+  @Fetch(FetchMode.JOIN)
   private List<Actor> actors;
   // @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
   //@ManyToAny()
