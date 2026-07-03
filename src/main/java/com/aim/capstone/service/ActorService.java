@@ -36,6 +36,27 @@ public class ActorService
     return actorRepository.findMovieByMovieCast(id);
   }
 
+  public Actor getRandomActor()
+  {
+    return getRandom();
+  }
+
+  public List<Actor> getRandomActors()
+  {
+    List<Actor> randos = new ArrayList<Actor>();
+
+    do
+    {
+      Actor testActor = getRandom();
+
+      if(!randos.contains(testActor))
+        randos.add(testActor);
+    }
+    while(randos.size() >= 4);
+
+    return randos;
+  }
+
   public Actor addNewActor(Actor actor)
   {
     Optional<Actor> actorOptional = actorRepository.findActorByName(actor.getLastName(), actor.getFirstName());
@@ -65,6 +86,22 @@ public class ActorService
     {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor not found");
     }
+  }
+
+  private Actor getRandom()
+  {
+    long max = actorRepository.getMax();
+    long randId;
+    Optional<Actor> temp = Optional.empty();
+
+    do
+    {
+      randId = new Random().nextLong(max);
+      temp = actorRepository.findById(randId);
+    }
+    while(temp.isEmpty());
+
+    return temp.get();
   }
 
 }

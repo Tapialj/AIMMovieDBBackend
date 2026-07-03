@@ -36,6 +36,23 @@ public class DirectorService
     return directorRepository.findMovieByDirectorId(id);
   }
 
+  public Director getRandomDirector()
+  {
+    return getRandom();
+  }
+
+  public List<Director> getRandomDirectors()
+  {
+    List<Director> randos = new ArrayList<Director>();
+
+    for(int i = 0; i < 4; i++)
+    {
+      randos.add(getRandom());
+    }
+
+    return randos;
+  }
+
   public Director addNewDirector(Director director)
   {
     Optional<Director> directorOptional = directorRepository.findDirectorByName(director.getLastName(), director.getFirstName());
@@ -65,6 +82,22 @@ public class DirectorService
     {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Director not found");
     }
+  }
+
+  private Director getRandom()
+  {
+    long max = directorRepository.getMax();
+    long randId;
+    Optional<Director> temp = Optional.empty();
+
+    do
+    {
+      randId = new Random().nextLong(max);
+      temp = directorRepository.findById(randId);
+    }
+    while(temp.isEmpty());
+
+    return temp.get();
   }
 
 }

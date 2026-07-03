@@ -39,6 +39,18 @@ public class DirectorController
     return directorService.getDirectorMovies(directorId);
   }
 
+  @GetMapping(path = "random")
+  public Director getRandomDirector()
+  {
+    return directorService.getRandomDirector();
+  }
+
+  @GetMapping(path = "random-list")
+  public List<Director> getRandomDirectors()
+  {
+    return directorService.getRandomDirectors();
+  }
+
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Director createDirector(@RequestBody Director director)

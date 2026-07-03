@@ -30,6 +30,23 @@ public class MovieService
     return movieRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie does not exist."));
   }
 
+  public Movie getRandomMovie()
+  {
+    return getRandom();
+  }
+
+  public List<Movie> getRandomMovies()
+  {
+    List<Movie> randos = new ArrayList<Movie>();
+
+    for(int i = 0; i < 4; i++)
+    {
+      randos.add(getRandom());
+    }
+
+    return randos;
+  }
+
   public Movie addNewMovie(Movie movie)
   {
     Optional<Movie> movieTitleOptional = movieRepository.findByTitle(movie.getTitle());
@@ -60,6 +77,22 @@ public class MovieService
     {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found");
     }
+  }
+
+  private Movie getRandom()
+  {
+    long max = movieRepository.getMax();
+    long randId;
+    Optional<Movie> temp = Optional.empty();
+
+    do
+    {
+      randId = new Random().nextLong(max);
+      temp = movieRepository.findById(randId);
+    }
+    while(temp.isEmpty());
+
+    return temp.get();
   }
 
 }

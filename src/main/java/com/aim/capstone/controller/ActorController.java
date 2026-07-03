@@ -39,6 +39,18 @@ public class ActorController
     return actorService.getActorMovies(actorId);
   }
 
+  @GetMapping(path = "random")
+  public Actor getRandomActor()
+  {
+    return actorService.getRandomActor();
+  }
+
+  @GetMapping(path = "random-list")
+  public List<Actor> getRandomActors()
+  {
+    return actorService.getRandomActors();
+  }
+
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Actor createActor(@RequestBody Actor actor)

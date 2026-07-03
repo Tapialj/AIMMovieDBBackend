@@ -32,6 +32,18 @@ public class MovieController
     return movieService.getMovie(movieId);
   }
 
+  @GetMapping(path = "random")
+  public Movie getRandomMovie()
+  {
+    return movieService.getRandomMovie();
+  }
+
+  @GetMapping(path = "random-list")
+  public List<Movie> getRandomMovies()
+  {
+    return movieService.getRandomMovies();
+  }
+
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Movie createMovie(@RequestBody Movie movie)
