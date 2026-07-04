@@ -19,10 +19,10 @@ FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
 # Copy built jar file from build stage
-COPY --from=build /app/target/capstone.jar .
+COPY --from=build /app/target/aimmoviedb.jar .
 
 # Expose 8080
 EXPOSE 8080
 
 # Specify command to run app
-ENTRYPOINT ["java", "-jar", "/app/capstone.jar"]
+ENTRYPOINT ["java", "-jar", "/app/aimmoviedb.jar"]
