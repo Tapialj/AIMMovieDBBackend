@@ -5,6 +5,7 @@ import com.aim.capstone.enums.Roles;
 
 import java.util.*;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -20,15 +21,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.*;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig
 {
 
+  @Value("#{'${cors.url}'.split(',')}")
+  List<String> corsUrls;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final AuthenticationManager authenticationManager;
   private final LogoutHandler logoutHandler;
@@ -70,16 +75,16 @@ public class SecurityConfig
 
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
-      CorsConfiguration configuration = new CorsConfiguration();
-      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-      configuration.setAllowedOrigins(Arrays.asList("http://localhost:3030", "http://localhost:3080"));
-      configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
-      configuration.setAllowCredentials(true);
-      configuration.setAllowedHeaders(List.of("Authorization", "Content-type"));
-      source.registerCorsConfiguration("/**", configuration);
-      
-      return source;
+    CorsConfiguration configuration = new CorsConfiguration();
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    
+    configuration.setAllowedOrigins(corsUrls);
+    configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
+    configuration.setAllowCredentials(true);
+    configuration.setAllowedHeaders(List.of("Authorization", "Content-type"));
+    source.registerCorsConfiguration("/**", configuration);
+    
+    return source;
   }
 
 }
