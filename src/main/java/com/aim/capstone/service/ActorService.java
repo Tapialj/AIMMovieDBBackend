@@ -49,10 +49,10 @@ public class ActorService
     {
       Actor testActor = getRandom();
 
-      if(!randos.contains(testActor))
+      if(!existsInList(randos, testActor.getId()))
         randos.add(testActor);
     }
-    while(randos.size() >= 4);
+    while(randos.size() < 4);
 
     return randos;
   }
@@ -86,6 +86,11 @@ public class ActorService
     {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor not found");
     }
+  }
+
+  private boolean existsInList(List<Actor> list, long id)
+  {
+    return list.stream().anyMatch(a -> id == a.getId());
   }
 
   private Actor getRandom()

@@ -45,10 +45,14 @@ public class DirectorService
   {
     List<Director> randos = new ArrayList<Director>();
 
-    for(int i = 0; i < 4; i++)
+    do
     {
-      randos.add(getRandom());
+      Director testDirector = getRandom();
+
+      if(!existsInList(randos, testDirector.getId()))
+        randos.add(testDirector);
     }
+    while(randos.size() < 4);
 
     return randos;
   }
@@ -82,6 +86,11 @@ public class DirectorService
     {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Director not found");
     }
+  }
+
+  private boolean existsInList(List<Director> list, long id)
+  {
+    return list.stream().anyMatch(a -> id == a.getId());
   }
 
   private Director getRandom()

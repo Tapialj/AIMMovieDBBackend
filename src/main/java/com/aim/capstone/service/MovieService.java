@@ -30,6 +30,11 @@ public class MovieService
     return movieRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie does not exist."));
   }
 
+  public List<Actor> getMovieActors(Long id)
+  {
+    return null;
+  }
+
   public Movie getRandomMovie()
   {
     return getRandom();
@@ -39,10 +44,14 @@ public class MovieService
   {
     List<Movie> randos = new ArrayList<Movie>();
 
-    for(int i = 0; i < 4; i++)
+    do
     {
-      randos.add(getRandom());
+      Movie testMovie = getRandom();
+
+      if(!existsInList(randos, testMovie.getId()))
+        randos.add(testMovie);
     }
+    while(randos.size() < 4);
 
     return randos;
   }
@@ -77,6 +86,11 @@ public class MovieService
     {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found");
     }
+  }
+
+  private boolean existsInList(List<Movie> list, long id)
+  {
+    return list.stream().anyMatch(a -> id == a.getId());
   }
 
   private Movie getRandom()
