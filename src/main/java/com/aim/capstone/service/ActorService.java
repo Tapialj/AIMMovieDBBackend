@@ -4,26 +4,22 @@ import java.util.*;
 
 import com.aim.capstone.model.Actor;
 import com.aim.capstone.model.Movie;
-import com.aim.capstone.model.response.AlreadyExistsException;
-import com.aim.capstone.model.response.DoesNotExistException;
 import com.aim.capstone.repository.ActorRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import lombok.*;
 
 
 @Service
+@RequiredArgsConstructor
 public class ActorService
 {
   
   private final ActorRepository actorRepository;
 
-  @Autowired
-  public ActorService(ActorRepository actorRepository)
-  {
-    this.actorRepository = actorRepository;
-  }
 
   public List<Actor> getActors()
   {
@@ -32,12 +28,33 @@ public class ActorService
 
   public Actor getActor(Long id) 
   {
-    return actorRepository.findById(id).orElseThrow(() -> new DoesNotExistException("Actor Does not exist."));
+    return actorRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor Does not exist."));
   }
 
   public List<Movie> getActorMovies(Long id)
   {
     return actorRepository.findMovieByMovieCast(id);
+  }
+
+  public Actor getRandomActor()
+  {
+    return getRandom();
+  }
+
+  public List<Actor> getRandomActors()
+  {
+    List<Actor> randos = new ArrayList<Actor>();
+
+    do
+    {
+      Actor testActor = getRandom();
+
+      if(!existsInList(randos, testActor.getId()))
+        randos.add(testActor);
+    }
+    while(randos.size() < 4);
+
+    return randos;
   }
 
   public Actor addNewActor(Actor actor)
@@ -46,32 +63,50 @@ public class ActorService
 
     if(actorOptional.isPresent())
     {
-      throw new AlreadyExistsException("Actor already exists.");
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "Actor already exists.");
     }
 
-    actorRepository.save(actor);
-
-    return actor;
+    return actorRepository.save(actor);
   }
 
   public void deleteActor(Long actorId)
   {
-    boolean exists = actorRepository.existsById(actorId);
-
-    if(!exists)
-    {
-      throw new DoesNotExistException("Actor with ID " + actorId + " does not exist.");
-    }
-
     actorRepository.deleteById(actorId);
   }
 
-  @Transactional
   public Actor updateActor(Actor actor)
   {
-    actorRepository.save(actor);
+    Optional<Actor> existing = actorRepository.findById(actor.getId());
 
-    return actor;
+    if(existing.isPresent())
+    {
+      return actorRepository.save(actor);
+    }
+    else
+    {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor not found");
+    }
+  }
+
+  private boolean existsInList(List<Actor> list, long id)
+  {
+    return list.stream().anyMatch(a -> id == a.getId());
+  }
+
+  private Actor getRandom()
+  {
+    long max = actorRepository.getMax();
+    long randId;
+    Optional<Actor> temp = Optional.empty();
+
+    do
+    {
+      randId = new Random().nextLong(max);
+      temp = actorRepository.findById(randId);
+    }
+    while(temp.isEmpty());
+
+    return temp.get();
   }
 
 }

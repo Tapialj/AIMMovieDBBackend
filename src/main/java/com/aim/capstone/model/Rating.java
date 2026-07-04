@@ -5,14 +5,21 @@ import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.*;
 
+import lombok.*;
 
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "ratings")
-public class Rating 
+public class Rating implements Comparable<Rating>
 {
   
-  @Id 
-  @Column(name = "id")
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "rating_id")
   private Long id;
   @Column(name = "rating")
   private String rating;
@@ -21,56 +28,10 @@ public class Rating
   private List<Movie> movies;
   
   
-  public Rating()
-  {
-
-  }
-
-  public Rating(String rating)
-  {
-    this.rating = rating;
-  }
-
-  public Rating(Long id, String rating)
-  {
-    this.id = id;
-    this.rating = rating;
-  }
-
-  public Long getId()
-  {
-    return id;
-  }
-
-  public void setId(Long id)
-  {
-    this.id = id;
-  }
-
-  public String getRating()
-  {
-    return rating;
-  }
-
-  public void setRating(String rating)
-  {
-    this.rating = rating;
-  }
-
-  public List<Movie> getMovies()
-  {
-    return movies;
-  }
-
-  public void setMovies(List<Movie> movies)
-  {
-    this.movies = movies;
-  }
-
   @Override
-  public String toString()
+  public int compareTo(Rating r)
   {
-    return "Rating [id=" + id + ", movies=" + movies + ", rating=" + rating + "]";
+    return this.getId().compareTo(r.getId());
   }
   
 }

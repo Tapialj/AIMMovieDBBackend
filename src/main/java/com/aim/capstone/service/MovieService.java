@@ -3,27 +3,22 @@ package com.aim.capstone.service;
 import java.util.*;
 
 import com.aim.capstone.model.*;
-import com.aim.capstone.model.response.AlreadyExistsException;
-import com.aim.capstone.model.response.DoesNotExistException;
 import com.aim.capstone.repository.MovieRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import lombok.*;
 
 
 @Service
+@RequiredArgsConstructor
 public class MovieService 
 {
  
   private final MovieRepository movieRepository;
 
-  
-  @Autowired
-  public MovieService(MovieRepository movieRepository)
-  {
-    this.movieRepository = movieRepository;
-  }
 
   public List<Movie> getMovies()
   {
@@ -32,22 +27,46 @@ public class MovieService
 
   public Movie getMovie(Long id)
   {
-    return movieRepository.findById(id).orElseThrow(() -> new DoesNotExistException("Movie does not exist."));
-    //other options are findById(id).get(); or findById(id).orElse(new Movie());
+    return movieRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie does not exist."));
+  }
+
+  public List<Actor> getMovieActors(Long id)
+  {
+    return null;
+  }
+
+  public Movie getRandomMovie()
+  {
+    return getRandom();
+  }
+
+  public List<Movie> getRandomMovies()
+  {
+    List<Movie> randos = new ArrayList<Movie>();
+
+    do
+    {
+      Movie testMovie = getRandom();
+
+      if(!existsInList(randos, testMovie.getId()))
+        randos.add(testMovie);
+    }
+    while(randos.size() < 4);
+
+    return randos;
   }
 
   public Movie addNewMovie(Movie movie)
   {
-    Optional<Movie> movieOptional = movieRepository.findMovieByTitle(movie.getTitle());
+    Optional<Movie> movieTitleOptional = movieRepository.findByTitle(movie.getTitle());
+    Optional<Movie> movieReleaseOptional = movieRepository.findByReleaseDate(movie.getReleaseDate());
 
-    if(movieOptional.isPresent())
+    if(movieTitleOptional.isPresent() && movieReleaseOptional.isPresent())
     {
-      throw new AlreadyExistsException("Title already exists.");
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "Movie already exists.");
     }
 
-    movieRepository.save(movie);
-
-    return movie;
+    return movieRepository.save(movie);
   }
 
   public void deleteMovie(Long id)
@@ -55,12 +74,39 @@ public class MovieService
     movieRepository.deleteById(id);
   }
 
-  @Transactional
   public Movie updateMovie(Movie movie)
   {
-    movieRepository.save(movie);
+    Optional<Movie> existing = movieRepository.findById(movie.getId());
 
-    return movie;
+    if(existing.isPresent())
+    {
+      return movieRepository.save(movie);
+    }
+    else
+    {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found");
+    }
+  }
+
+  private boolean existsInList(List<Movie> list, long id)
+  {
+    return list.stream().anyMatch(a -> id == a.getId());
+  }
+
+  private Movie getRandom()
+  {
+    long max = movieRepository.getMax();
+    long randId;
+    Optional<Movie> temp = Optional.empty();
+
+    do
+    {
+      randId = new Random().nextLong(max);
+      temp = movieRepository.findById(randId);
+    }
+    while(temp.isEmpty());
+
+    return temp.get();
   }
 
 }

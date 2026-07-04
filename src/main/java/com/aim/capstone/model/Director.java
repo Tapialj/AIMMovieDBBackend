@@ -5,16 +5,21 @@ import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.*;
 
+import lombok.*;
 
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "directors")
-public class Director 
+public class Director implements Comparable<Director>
 {
   
   @Id 
-  @SequenceGenerator(name = "director_sequence", sequenceName = "director_sequence", allocationSize = 1)
-  @GeneratedValue(strategy = GenerationType.AUTO, generator = "director_sequence")
-  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "director_id")
   private Long id;
   @Column(name = "last_name")
   private String lastName;
@@ -27,68 +32,10 @@ public class Director
   // private List<Comment> comments;
   
   
-  public Director() 
-  {
-  
-  }
-
-  public Director(String lastName, String firstName)
-  {
-    this.lastName = lastName;
-    this.firstName = firstName;
-  }
-
-  public Director(Long id, String lastName, String firstName)
-  {
-    this.id = id;
-    this.lastName = lastName;
-    this.firstName = firstName;
-  }
-  
-  public Long getId()
-  {
-    return id;
-  }
-
-  public void setId(Long id)
-  {
-    this.id = id;
-  }
-
-  public String getLastName()
-  {
-    return lastName;
-  }
-
-  public void setLastName(String lastName)
-  {
-    this.lastName = lastName;
-  }
-
-  public String getFirstName()
-  {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName)
-  {
-    this.firstName = firstName;
-  }
-
-  public List<Movie> getMovies()
-  {
-    return movies;
-  }
-
-  public void setMovies(List<Movie> movies)
-  {
-    this.movies = movies;
-  }
-
   @Override
-  public String toString()
+  public int compareTo(Director d)
   {
-    return "Director [firstName=" + firstName + ", id=" + id + ", lastName=" + lastName + ", movies=" + movies + "]";
+    return this.getId().compareTo(d.getId());
   }
 
 }

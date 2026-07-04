@@ -5,23 +5,20 @@ import java.util.*;
 import com.aim.capstone.model.*;
 import com.aim.capstone.service.MovieService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import lombok.*;
+
 
 @RestController
-@RequestMapping(path = "api/movies")
+@RequiredArgsConstructor
+@RequestMapping(path = "/api/movies")
 public class MovieController 
 {
 
   private final MovieService movieService;
 
-  @Autowired
-  public MovieController(MovieService movieService)
-  {
-    this.movieService = movieService;
-  }
 
   @GetMapping
   public List<Movie> getMovies()
@@ -30,9 +27,27 @@ public class MovieController
   }
 
   @GetMapping(path = "{movieId}")
-  public Movie getMovie(@PathVariable("movieId") Long movieId)
+  public Movie getMovie(@PathVariable Long movieId)
   {
     return movieService.getMovie(movieId);
+  }
+
+  @GetMapping(path = "{movieId}/actors")
+  public List<Actor> getMovieActors(@PathVariable Long movieId)
+  {
+    return movieService.getMovieActors(movieId);
+  }
+
+  @GetMapping(path = "random")
+  public Movie getRandomMovie()
+  {
+    return movieService.getRandomMovie();
+  }
+
+  @GetMapping(path = "random-list")
+  public List<Movie> getRandomMovies()
+  {
+    return movieService.getRandomMovies();
   }
 
   @PostMapping
@@ -43,7 +58,7 @@ public class MovieController
   }
 
   @DeleteMapping(path = "{movieId}")
-  public void deleteMovie(@PathVariable("movieId") Long movieId)
+  public void deleteMovie(@PathVariable Long movieId)
   {
     movieService.deleteMovie(movieId);
   }
