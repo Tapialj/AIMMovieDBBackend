@@ -1,7 +1,7 @@
 package com.aim.capstone.configuration;
 
-import com.aim.capstone.Security.JwtAuthenticationFilter;
 import com.aim.capstone.enums.Roles;
+import com.aim.capstone.security.JwtAuthenticationFilter;
 
 import java.util.*;
 

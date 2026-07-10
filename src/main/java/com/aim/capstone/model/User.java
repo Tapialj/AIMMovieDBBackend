@@ -1,8 +1,7 @@
 package com.aim.capstone.model;
 
-import com.aim.capstone.Security.Token;
 import com.aim.capstone.enums.Roles;
-
+import com.aim.capstone.security.Token;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;

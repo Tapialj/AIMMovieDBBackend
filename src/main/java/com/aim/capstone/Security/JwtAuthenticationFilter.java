@@ -1,4 +1,4 @@
-package com.aim.capstone.Security;
+package com.aim.capstone.security;
 
 import com.aim.capstone.repository.TokenRepository;
 
