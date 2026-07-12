@@ -55,12 +55,12 @@ public class AuthenticationService
       .password(passwordEncoder.encode(request.getPassword()))
       .role(Roles.USER)
       .build();
-    
+
     User savedUser = userRepository.save(user);
     String jwtToken = jwtService.generateToken(user);
     List<String> roles = Arrays.asList(Roles.USER.getName());
     Cookie refreshToken = jwtService.generateRefreshToken(user);
-    log.debug("New User {} has been created with roles {}", savedUser.getUsername(), roles);
+    log.info("New User {} has been created with roles {}", savedUser.getUsername(), roles);
 
     response.addCookie(refreshToken);
     saveUserToken(savedUser, refreshToken.getValue(), TokenType.REFRESH);
@@ -83,7 +83,7 @@ public class AuthenticationService
     Cookie refreshToken = jwtService.generateRefreshToken(user);
     List<String> roles = user.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
     List<Token> validUserTokens = tokenRepository.findAllValidTokenByUserId(user.getId());
-    log.debug("User {} has been authenticated with", user.getUsername());
+    log.info("User {} has been authenticated with", user.getUsername());
 
     response.addCookie(refreshToken);
     revokeAllUserTokens(validUserTokens);
