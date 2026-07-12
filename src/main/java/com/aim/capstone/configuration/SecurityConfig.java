@@ -47,11 +47,11 @@ public class SecurityConfig
       .cors(Customizer.withDefaults())
       .authorizeHttpRequests((authorizeHttpRequests) ->
         authorizeHttpRequests
-          // .requestMatchers("/api/**").permitAll()
+          .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
           .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
-          .requestMatchers(HttpMethod.POST, "/api/**").hasRole(Roles.ADMIN.getName())
-          .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole(Roles.ADMIN.getName())
+          .requestMatchers(HttpMethod.POST, "/api/**").hasRole(Roles.USER.getName())
           .requestMatchers(HttpMethod.PUT, "/api/**").hasRole(Roles.USER.getName())
+          .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole(Roles.ADMIN.getName())
           // .anyRequest().authenticated()
       )
       .sessionManagement((sessionManagement) ->
