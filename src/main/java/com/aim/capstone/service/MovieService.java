@@ -32,7 +32,7 @@ public class MovieService
 
   public List<Actor> getMovieActors(Long id)
   {
-    return null;
+    return movieRepository.findMovieActors(id);
   }
 
   public Movie getRandomMovie()
@@ -81,6 +81,20 @@ public class MovieService
     if(existing.isPresent())
     {
       return movieRepository.save(movie);
+    }
+    else
+    {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found");
+    }
+  }
+
+  public Movie updateMovieActorRemove(long id)
+  {
+    Optional<Movie> existing = movieRepository.findById(id);
+
+    if(existing.isPresent())
+    {
+      return movieRepository.save(existing.get());
     }
     else
     {
