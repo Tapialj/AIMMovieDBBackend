@@ -25,7 +25,7 @@ public class Director implements Comparable<Director>
   private String lastName;
   @Column(name = "first_name")
   private String firstName;
-  @OneToMany(mappedBy = "director")//, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "director")
   @JsonIgnore
   private List<Movie> movies;
   // @OneToMany(mappedBy = "director", cascade = CascadeType.ALL)
