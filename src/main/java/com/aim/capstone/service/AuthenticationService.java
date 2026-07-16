@@ -2,7 +2,7 @@ package com.aim.capstone.service;
 
 import com.aim.capstone.model.User;
 import com.aim.capstone.auth.*;
-import com.aim.capstone.enums.Roles;
+import com.aim.capstone.enums.Role;
 import com.aim.capstone.enums.TokenType;
 import com.aim.capstone.repository.*;
 import com.aim.capstone.security.*;
@@ -53,12 +53,12 @@ public class AuthenticationService
       .builder()
       .username(request.getUsername())
       .password(passwordEncoder.encode(request.getPassword()))
-      .role(Roles.USER)
+      .roles(Arrays.asList(Role.USER))
       .build();
 
     User savedUser = userRepository.save(user);
     String jwtToken = jwtService.generateToken(user);
-    List<String> roles = Arrays.asList(Roles.USER.getName());
+    List<String> roles = Arrays.asList(Role.USER.getName());
     Cookie refreshToken = jwtService.generateRefreshToken(user);
     log.info("New User {} has been created with roles {}", savedUser.getUsername(), roles);
 
