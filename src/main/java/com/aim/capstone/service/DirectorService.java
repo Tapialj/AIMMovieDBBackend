@@ -38,19 +38,22 @@ public class DirectorService
 
   public Director getRandomDirector()
   {
-    return getRandom();
+    List<Long> directorIds = directorRepository.getDirectorIds();
+    long randomIndex = new Random().nextLong(directorIds.size());
+
+    return directorRepository.findById(directorIds.get((int) randomIndex)).get();
   }
 
   public List<Director> getRandomDirectors()
   {
+    List<Long> directorIds = directorRepository.getDirectorIds();
     List<Director> randos = new ArrayList<Director>();
 
     do
     {
-      Director testDirector = getRandom();
-
-      if(!existsInList(randos, testDirector.getId()))
-        randos.add(testDirector);
+      long randomIndex = new Random().nextLong(directorIds.size());
+      if(!existsInList(randos, directorIds.get((int) randomIndex)))
+        randos.add(directorRepository.findById(directorIds.get((int) randomIndex)).get());
     }
     while(randos.size() < 4);
 
@@ -91,22 +94,6 @@ public class DirectorService
   private boolean existsInList(List<Director> list, long id)
   {
     return list.stream().anyMatch(a -> id == a.getId());
-  }
-
-  private Director getRandom()
-  {
-    long max = directorRepository.getMax();
-    long randId;
-    Optional<Director> temp = Optional.empty();
-
-    do
-    {
-      randId = new Random().nextLong(max);
-      temp = directorRepository.findById(randId);
-    }
-    while(temp.isEmpty());
-
-    return temp.get();
   }
 
 }

@@ -37,19 +37,26 @@ public class MovieService
 
   public Movie getRandomMovie()
   {
-    return getRandom();
+    List<Long> movieIds = movieRepository.getMovieIds();
+    long randomIndex = new Random().nextLong(movieIds.size());
+
+    return movieRepository.findById(movieIds.get((int) randomIndex)).get();
   }
 
   public List<Movie> getRandomMovies()
   {
+    List<Long> movieIds = movieRepository.getMovieIds();
     List<Movie> randos = new ArrayList<Movie>();
 
     do
     {
-      Movie testMovie = getRandom();
-
-      if(!existsInList(randos, testMovie.getId()))
-        randos.add(testMovie);
+      long randomIndex = new Random().nextLong(movieIds.size());
+      if(!existsInList(randos, movieIds.get((int) randomIndex)))
+      {
+        Long tempId = movieIds.get((int) randomIndex);
+        Optional<Movie> tempMovie = movieRepository.findById(tempId);
+        randos.add(tempMovie.get());
+      }
     }
     while(randos.size() < 4);
 
@@ -88,39 +95,9 @@ public class MovieService
     }
   }
 
-  public Movie updateMovieActorRemove(long id)
-  {
-    Optional<Movie> existing = movieRepository.findById(id);
-
-    if(existing.isPresent())
-    {
-      return movieRepository.save(existing.get());
-    }
-    else
-    {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found");
-    }
-  }
-
   private boolean existsInList(List<Movie> list, long id)
   {
     return list.stream().anyMatch(a -> id == a.getId());
-  }
-
-  private Movie getRandom()
-  {
-    long max = movieRepository.getMax();
-    long randId;
-    Optional<Movie> temp = Optional.empty();
-
-    do
-    {
-      randId = new Random().nextLong(max);
-      temp = movieRepository.findById(randId);
-    }
-    while(temp.isEmpty());
-
-    return temp.get();
   }
 
 }
