@@ -1,6 +1,6 @@
 package com.aim.capstone.configuration;
 
-import com.aim.capstone.enums.Roles;
+import com.aim.capstone.enums.Role;
 import com.aim.capstone.security.JwtAuthenticationFilter;
 
 import java.util.*;
@@ -8,7 +8,7 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+// import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,7 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+// import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.*;
@@ -49,9 +49,11 @@ public class SecurityConfig
         authorizeHttpRequests
           .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
           .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
-          .requestMatchers(HttpMethod.POST, "/api/**").hasRole(Roles.USER.getName())
-          .requestMatchers(HttpMethod.PUT, "/api/**").hasRole(Roles.USER.getName())
-          .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole(Roles.ADMIN.getName())
+          .requestMatchers(HttpMethod.DELETE, "/api/actors/*/movies/**")
+            .hasAnyAuthority(Role.USER.getName(), Role.ADMIN.getName())
+          .requestMatchers(HttpMethod.POST, "/api/**").hasAnyAuthority(Role.USER.getName(), Role.ADMIN.getName())
+          .requestMatchers(HttpMethod.PUT, "/api/**").hasAnyAuthority(Role.USER.getName(), Role.ADMIN.getName())
+          .requestMatchers(HttpMethod.DELETE, "/api/**").hasAuthority(Role.ADMIN.getName())
           // .anyRequest().authenticated()
       )
       .sessionManagement((sessionManagement) ->
