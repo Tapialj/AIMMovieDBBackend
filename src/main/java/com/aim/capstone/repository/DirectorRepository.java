@@ -34,10 +34,10 @@ public interface DirectorRepository extends JpaRepository <Director, Long>
 
   @Query(
     """
-    SELECT MAX(d.id)
+    SELECT d.id
     FROM Director d
     """
   )
-  long getMax();
+  List<Long> getDirectorIds();
 
 }

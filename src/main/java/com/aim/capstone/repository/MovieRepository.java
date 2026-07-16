@@ -29,10 +29,10 @@ public interface MovieRepository extends JpaRepository<Movie, Long>
 
   @Query(
     """
-    SELECT MAX(m.id)
+    SELECT m.id
     FROM Movie m
     """
   )
-  long getMax();
-
+  List<Long> getMovieIds();
+  
 }

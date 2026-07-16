@@ -34,10 +34,10 @@ public interface ActorRepository extends JpaRepository <Actor, Long>
 
   @Query(
     """
-    SELECT MAX(a.id)
+    SELECT a.id
     FROM Actor a
     """
   )
-  long getMax();
+  List<Long> getActorIds();
 
 }
