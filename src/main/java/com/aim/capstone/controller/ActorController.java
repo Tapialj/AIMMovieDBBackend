@@ -71,4 +71,18 @@ public class ActorController
     return actorService.updateActor(actor);
   }
 
+  @PostMapping(path = "movies/{movieId}")
+  @ResponseStatus(HttpStatus.CREATED)
+  public Movie updateMovieAddActor(@RequestBody Actor actor, @PathVariable Long movieId)
+  {
+    return actorService.updateMovieAddActor(actor, movieId);
+  }
+
+  @DeleteMapping(path = "{actorId}/movies/{movieId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void updateMovieRemoveActor(@PathVariable Long actorId, @PathVariable Long movieId)
+  {
+    actorService.updateMovieRemoveActor(actorId, movieId);
+  }
+
 }
