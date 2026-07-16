@@ -35,17 +35,7 @@ public class Actor implements Comparable<Actor>
   private Set<Movie> movies = new HashSet<Movie>();
   // @OneToMany(mappedBy = "actor", cascade = CascadeType.ALL)
   // private List<Comment> comments;
-
-
-  public void addMovie(Movie movie)
-  {
-    this.movies.add(movie);
-  }
-
-  public void removeMovie(Movie movie)
-  {
-    this.movies.add(movie);
-  }
+  
 
   @PreRemove
   private void removeActorFromMovies()
