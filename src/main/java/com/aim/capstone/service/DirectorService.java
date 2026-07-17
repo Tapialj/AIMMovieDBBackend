@@ -35,7 +35,7 @@ public class DirectorService
 
   public List<Movie> getDirectorMovies(Long id)
   {
-    return directorRepository.findMovieByDirectorId(id);
+    return directorRepository.findMoviesByDirectorId(id);
   }
 
   public Director getRandomDirector()

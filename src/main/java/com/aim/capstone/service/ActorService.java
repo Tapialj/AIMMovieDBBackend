@@ -35,7 +35,7 @@ public class ActorService
 
   public List<Movie> getActorMovies(Long id)
   {
-    return actorRepository.findMovieByMovieCast(id);
+    return actorRepository.findMoviesByActorId(id);
   }
 
   public Actor getRandomActor()
