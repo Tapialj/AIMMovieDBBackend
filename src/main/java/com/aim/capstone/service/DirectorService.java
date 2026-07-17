@@ -5,9 +5,10 @@ import java.util.*;
 import com.aim.capstone.model.Director;
 import com.aim.capstone.model.Movie;
 import com.aim.capstone.repository.DirectorRepository;
-
+import com.aim.capstone.repository.MovieRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import lombok.*;
@@ -19,6 +20,7 @@ public class DirectorService
 {
   
   private final DirectorRepository directorRepository;
+  private final MovieRepository movieRepository;
 
 
   public List<Director> getDirectors()
@@ -88,6 +90,53 @@ public class DirectorService
     else
     {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Director not found");
+    }
+  }
+
+  @Transactional
+  public Movie updateMovieAddDirector(Director director, Long movieId)
+  {
+    Optional<Movie> movieOptional = movieRepository.findById(movieId);
+    
+    if(movieOptional.isPresent())
+    {
+      Movie updateMovie = movieOptional.get();
+
+      updateMovie.addDirector(director);
+
+      return movieRepository.save(updateMovie);
+    }
+    else
+    {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found");  
+    }
+  }
+  
+  @Transactional
+  public void updateMovieRemoveDirector(Long directorId, Long movieId)
+  {
+    Optional<Director> directorOptional = directorRepository.findById(directorId);
+    Optional<Movie> movieOptional = movieRepository.findById(movieId);
+    
+    if(directorOptional.isPresent() && movieOptional.isPresent())
+    {
+      Director updateDirector = directorOptional.get();
+      Movie updateMovie = movieOptional.get();
+
+      updateMovie.removeDirector(updateDirector);
+      
+      movieRepository.save(updateMovie);
+    }
+    else
+    {
+      if(directorOptional.isEmpty())
+      {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor not found");  
+      }
+      else
+      {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found");
+      }
     }
   }
 
