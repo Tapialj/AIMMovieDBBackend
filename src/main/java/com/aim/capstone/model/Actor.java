@@ -28,14 +28,14 @@ public class Actor implements Comparable<Actor>
   private String lastName;
   @Column(name = "first_name")
   private String firstName;
-  @ManyToMany(mappedBy = "actors") //, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+  @ManyToMany(mappedBy = "actors")
   @JsonIgnore
   @Builder.Default
   @EqualsAndHashCode.Exclude
   private Set<Movie> movies = new HashSet<Movie>();
   // @OneToMany(mappedBy = "actor", cascade = CascadeType.ALL)
   // private List<Comment> comments;
-  
+
 
   @PreRemove
   private void removeActorFromMovies()
