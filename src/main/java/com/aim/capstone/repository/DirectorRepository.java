@@ -26,7 +26,7 @@ public interface DirectorRepository extends JpaRepository <Director, Long>
     """
     SELECT m
     FROM Movie m
-    JOIN m.director d
+    JOIN m.directors d
     WHERE d.id = ?1
     """
   )
