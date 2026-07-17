@@ -42,11 +42,17 @@ public class Movie implements Comparable<Movie>
   @JoinColumn(name = "rating_id", nullable = false)
   @Fetch(FetchMode.JOIN)
   private Rating rating;
-  @ManyToOne
-  @JoinColumn(name = "director_id")
+  @ManyToMany
+  @JoinTable(
+    name = "movie_directors", 
+    joinColumns = @JoinColumn(name = "movie_id"),
+    inverseJoinColumns = @JoinColumn(name = "director_id")
+  )
   @Fetch(FetchMode.JOIN)
-  private Director director;
-  @ManyToMany //(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+  @Builder.Default
+  @EqualsAndHashCode.Exclude
+  private Set<Director> directors = new HashSet<Director>();;
+  @ManyToMany
   @JoinTable(
     name = "movie_cast", 
     joinColumns = @JoinColumn(name = "movie_id"),
@@ -71,6 +77,18 @@ public class Movie implements Comparable<Movie>
   {
     actors.remove(actor);
     actor.getMovies().remove(this);
+  }
+
+  public void addDirector(Director director)
+  {
+    directors.add(director);
+    director.getMovies().add(this);
+  }
+  
+  public void removeDirector(Director director)
+  {
+    directors.remove(director);
+    director.getMovies().remove(this);
   }
 
   @Override
