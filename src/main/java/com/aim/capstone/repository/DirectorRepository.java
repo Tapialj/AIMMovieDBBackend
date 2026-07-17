@@ -30,7 +30,7 @@ public interface DirectorRepository extends JpaRepository <Director, Long>
     WHERE d.id = ?1
     """
   )
-  List<Movie> findMovieByDirectorId(Long id);
+  List<Movie> findMoviesByDirectorId(Long id);
 
   @Query(
     """
