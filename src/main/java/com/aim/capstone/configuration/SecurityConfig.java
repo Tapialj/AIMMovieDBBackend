@@ -51,6 +51,8 @@ public class SecurityConfig
           .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
           .requestMatchers(HttpMethod.DELETE, "/api/actors/*/movies/**")
             .hasAnyAuthority(Role.USER.getName(), Role.ADMIN.getName())
+          .requestMatchers(HttpMethod.DELETE, "/api/directors/*/movies/**")
+            .hasAnyAuthority(Role.USER.getName(), Role.ADMIN.getName())
           .requestMatchers(HttpMethod.POST, "/api/**").hasAnyAuthority(Role.USER.getName(), Role.ADMIN.getName())
           .requestMatchers(HttpMethod.PUT, "/api/**").hasAnyAuthority(Role.USER.getName(), Role.ADMIN.getName())
           .requestMatchers(HttpMethod.DELETE, "/api/**").hasAuthority(Role.ADMIN.getName())
@@ -66,7 +68,7 @@ public class SecurityConfig
       // )
       .logout((logoutCustomizer) ->
         logoutCustomizer
-          .logoutUrl("/api/logout")
+          .logoutUrl("/api/auth/logout")
           .addLogoutHandler(logoutHandler)
           .logoutSuccessHandler((req, res, auth) ->
             SecurityContextHolder.clearContext()
