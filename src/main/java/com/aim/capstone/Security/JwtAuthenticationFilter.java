@@ -41,7 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
     
     if(authHeader == null || !authHeader.startsWith("Bearer"))
     {
-      // Something about this breaks Spring 4
       filterChain.doFilter(request, response);
       return;
     }
@@ -51,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
     
     if(username != null && SecurityContextHolder.getContext().getAuthentication() == null)
     {
-      UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+      UserDetails userDetails = userDetailsService.loadUserByUsername(username);
       boolean isTokenValid = tokenRepository.findByToken(jwt).map(t -> !t.isExpired() && !t.isRevoked()).orElse(false);
       
       if(jwtService.isTokenValid(jwt, userDetails) && isTokenValid)
