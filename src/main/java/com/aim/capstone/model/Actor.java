@@ -33,8 +33,6 @@ public class Actor implements Comparable<Actor>
   @Builder.Default
   @EqualsAndHashCode.Exclude
   private Set<Movie> movies = new HashSet<Movie>();
-  // @OneToMany(mappedBy = "actor", cascade = CascadeType.ALL)
-  // private List<Comment> comments;
 
 
   @PreRemove

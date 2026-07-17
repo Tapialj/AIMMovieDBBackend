@@ -32,8 +32,6 @@ public class Director implements Comparable<Director>
   @Builder.Default
   @EqualsAndHashCode.Exclude
   private Set<Movie> movies = new HashSet<Movie>();
-  // @OneToMany(mappedBy = "director", cascade = CascadeType.ALL)
-  // private List<Comment> comments;
   
   
   @PreRemove
