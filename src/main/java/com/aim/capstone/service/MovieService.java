@@ -35,6 +35,11 @@ public class MovieService
     return movieRepository.findMovieActors(id);
   }
 
+  public List<Director> getMovieDirectors(Long id)
+  {
+    return movieRepository.findMovieDirectors(id);
+  }
+
   public Movie getRandomMovie()
   {
     List<Long> movieIds = movieRepository.getMovieIds();

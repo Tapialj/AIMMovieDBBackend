@@ -38,6 +38,12 @@ public class MovieController
     return movieService.getMovieActors(movieId);
   }
 
+  @GetMapping(path = "{movieId}/directors")
+  public List<Director> getMovieDirectors(@PathVariable Long movieId)
+  {
+    return movieService.getMovieDirectors(movieId);
+  }
+
   @GetMapping(path = "random")
   public Movie getRandomMovie()
   {
