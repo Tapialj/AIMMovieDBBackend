@@ -43,24 +43,39 @@ public class AuthenticationService
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
+  private final String adminToken = System.getenv("ADMIN_TOKEN");
+
 
   public AuthenticationResponse register(RegisterRequest request, HttpServletResponse response)
   {
+    List<Role> rolesEnum;
+    List<String> rolesString;
+
     if(userRepository.existsByUsername(request.getUsername()))
       throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists.");
+
+    if(Objects.equals(request.getAdminToken(), adminToken))
+    {
+      rolesEnum = Arrays.asList(Role.USER, Role.ADMIN);
+      rolesString = Arrays.asList(Role.USER.getName(), Role.ADMIN.getName());
+    }
+    else
+    {
+      rolesEnum = Arrays.asList(Role.USER);
+      rolesString = Arrays.asList(Role.USER.getName());
+    }
 
     User user = User
       .builder()
       .username(request.getUsername())
       .password(passwordEncoder.encode(request.getPassword()))
-      .roles(Arrays.asList(Role.USER))
+      .roles(rolesEnum)
       .build();
 
     User savedUser = userRepository.save(user);
     String jwtToken = jwtService.generateToken(user);
-    List<String> roles = Arrays.asList(Role.USER.getName());
     Cookie refreshToken = jwtService.generateRefreshToken(user);
-    log.info("New User {} has been created with roles {}", savedUser.getUsername(), roles);
+    log.info("New User {} has been created with roles {}", savedUser.getUsername(), rolesString);
 
     response.addCookie(refreshToken);
     saveUserToken(savedUser, refreshToken.getValue(), TokenType.REFRESH);
@@ -70,7 +85,7 @@ public class AuthenticationService
       .builder()
       .user(user)
       .token(jwtToken)
-      .roles(roles)
+      .roles(rolesString)
       .build();
   }
 
