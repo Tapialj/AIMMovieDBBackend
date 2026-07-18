@@ -9,10 +9,12 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "actors")
 public class Actor implements Comparable<Actor>
@@ -26,12 +28,21 @@ public class Actor implements Comparable<Actor>
   private String lastName;
   @Column(name = "first_name")
   private String firstName;
-  @ManyToMany(mappedBy = "actors")//, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+  @ManyToMany(mappedBy = "actors")
   @JsonIgnore
-  private List<Movie> movies;
-  // @OneToMany(mappedBy = "actor", cascade = CascadeType.ALL)
-  // private List<Comment> comments;
+  @Builder.Default
+  @EqualsAndHashCode.Exclude
+  private Set<Movie> movies = new HashSet<Movie>();
 
+
+  @PreRemove
+  private void removeActorFromMovies()
+  {
+    for (Movie m : this.movies)
+    {
+      m.removeActor(this);
+    }
+  }
 
   @Override
   public int compareTo(Actor a)

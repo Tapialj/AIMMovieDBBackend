@@ -1,7 +1,7 @@
 package com.aim.capstone.repository;
 
-import com.aim.capstone.Security.Token;
 import com.aim.capstone.enums.TokenType;
+import com.aim.capstone.security.Token;
 
 import java.util.*;
 

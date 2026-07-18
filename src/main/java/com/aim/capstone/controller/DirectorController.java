@@ -71,4 +71,18 @@ public class DirectorController
     return directorService.updateDirector(director);
   }
 
+  @PostMapping(path = "movies/{movieId}")
+  @ResponseStatus(HttpStatus.CREATED)
+  public Movie updateMovieAddDirector(@RequestBody Director director, @PathVariable Long movieId)
+  {
+    return directorService.updateMovieAddDirector(director, movieId);
+  }
+
+  @DeleteMapping(path = "{directorId}/movies/{movieId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void updateMovieRemoveDirector(@PathVariable Long directorId, @PathVariable Long movieId)
+  {
+    directorService.updateMovieRemoveDirector(directorId, movieId);
+  }
+
 }

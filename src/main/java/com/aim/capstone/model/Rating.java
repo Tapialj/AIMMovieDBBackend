@@ -23,7 +23,7 @@ public class Rating implements Comparable<Rating>
   private Long id;
   @Column(name = "rating")
   private String rating;
-  @OneToMany(mappedBy = "rating")//, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "rating")
   @JsonIgnore
   private List<Movie> movies;
   

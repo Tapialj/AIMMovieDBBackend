@@ -3,7 +3,7 @@ package com.aim.capstone.repository;
 import java.time.*;
 import java.util.*;
 
-import com.aim.capstone.model.Movie;
+import com.aim.capstone.model.*;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,10 +18,30 @@ public interface MovieRepository extends JpaRepository<Movie, Long>
 
   @Query(
     """
-    SELECT MAX(m.id)
+    SELECT a
+    FROM Actor a
+    JOIN a.movies m
+    WHERE m.id = ?1
+    """
+  )
+  List<Actor> findMovieActors(long id);
+
+  @Query(
+    """
+    SELECT d
+    FROM Director d
+    JOIN d.movies m
+    WHERE m.id = ?1
+    """
+  )
+  List<Director> findMovieDirectors(long id);
+
+  @Query(
+    """
+    SELECT m.id
     FROM Movie m
     """
   )
-  long getMax();
-
+  List<Long> getMovieIds();
+  
 }

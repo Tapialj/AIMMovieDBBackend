@@ -1,4 +1,4 @@
-package com.aim.capstone.Security;
+package com.aim.capstone.security;
 
 import com.aim.capstone.enums.TokenType;
 import com.aim.capstone.model.User;
@@ -23,7 +23,7 @@ public class Token implements Comparable<Token>
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "token_id")
-  private Integer id;
+  private Long id;
   @Column(unique = true)
   private String token;
   @Enumerated(EnumType.STRING)
@@ -34,7 +34,7 @@ public class Token implements Comparable<Token>
   private boolean expired;
   private boolean revoked;
   @Column(name = "user_id")
-  private Integer userId;
+  private Long userId;
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
   @JsonIgnore

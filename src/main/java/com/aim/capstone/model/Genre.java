@@ -23,7 +23,7 @@ public class Genre implements Comparable<Genre>
   private Long id;
   @Column(name = "genre")
   private String genre;
-  @OneToMany(mappedBy = "genre")//, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "genre")
   @JsonIgnore
   private List<Movie> movies;
 

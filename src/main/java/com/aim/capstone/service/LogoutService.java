@@ -1,6 +1,6 @@
 package com.aim.capstone.service;
 
-import com.aim.capstone.Security.Token;
+import com.aim.capstone.security.Token;
 import com.aim.capstone.repository.TokenRepository;
 
 import java.util.*;

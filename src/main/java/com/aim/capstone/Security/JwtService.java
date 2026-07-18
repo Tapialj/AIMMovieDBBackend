@@ -1,4 +1,4 @@
-package com.aim.capstone.Security;
+package com.aim.capstone.security;
 
 import java.util.*;
 import java.util.function.Function;

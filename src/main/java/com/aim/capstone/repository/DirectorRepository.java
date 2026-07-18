@@ -26,18 +26,18 @@ public interface DirectorRepository extends JpaRepository <Director, Long>
     """
     SELECT m
     FROM Movie m
-    JOIN m.director d
+    JOIN m.directors d
     WHERE d.id = ?1
     """
   )
-  List<Movie> findMovieByDirectorId(Long id);
+  List<Movie> findMoviesByDirectorId(Long id);
 
   @Query(
     """
-    SELECT MAX(d.id)
+    SELECT d.id
     FROM Director d
     """
   )
-  long getMax();
+  List<Long> getDirectorIds();
 
 }
